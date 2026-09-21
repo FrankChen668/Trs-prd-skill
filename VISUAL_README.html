@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRS功能设计文档编写 Skill V1.0 - 可视化全览</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --card: #1a1d27;
+  --card2: #1e2233;
+  --border: #2a2d3a;
+  --text: #e2e4ea;
+  --muted: #7b7f92;
+  --blue: #4f8de8;
+  --blue-bg: #1e2d4a;
+  --green: #3ecf8e;
+  --green-bg: #1a3d2e;
+  --orange: #f5a623;
+  --orange-bg: #3d2e1a;
+  --red: #e85f5f;
+  --red-bg: #3d1a1a;
+  --purple: #a78bfa;
+  --purple-bg: #2a1f4a;
+  --cyan: #22d3ee;
+  --cyan-bg: #0f3d47;
+  --yellow: #f5d76e;
+  --yellow-bg: #3d3517;
+  --pink: #f472b6;
+  --pink-bg: #3d1a35;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 0;
+}
+
+/* === 顶部英雄区 === */
+.hero {
+  background: linear-gradient(135deg, #0d1117 0%, #1a2340 50%, #0f2847 100%);
+  padding: 60px 40px 50px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(79,141,232,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, rgba(34,211,238,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue-bg);
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #4f8de8 0%, #22d3ee 50%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+
+.hero-desc {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 680px;
+  margin: 0 auto 28px;
+  line-height: 1.7;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.hero-tags {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.hero-tag {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.hero-tag.b1 { background: var(--blue-bg); border-color: var(--blue); color: var(--blue); }
+.hero-tag.b2 { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.hero-tag.b3 { background: var(--purple-bg); border-color: var(--purple); color: var(--purple); }
+.hero-tag.b4 { background: var(--cyan-bg); border-color: var(--cyan); color: var(--cyan); }
+.hero-tag.b5 { background: var(--orange-bg); border-color: var(--orange); color: var(--orange); }
+
+/* === 主体布局 === */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.section {
+  margin-bottom: 48px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-num {
+  width: 32px;
+  height: 32px;
+  background: var(--blue-bg);
+  border: 1.5px solid var(--blue);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.section-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* === 两栏布局 === */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.four-col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+/* === 卡片 === */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  transition: all 0.25s;
+}
+
+.card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 4px 24px rgba(79,141,232,0.12);
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.card-body {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.card-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card-body li {
+  padding: 3px 0;
+  padding-left: 14px;
+  position: relative;
+}
+
+.card-body li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--blue);
+  font-size: 10px;
+  top: 4px;
+}
+
+/* === 颜色卡片 === */
+.card-blue { border-color: rgba(79,141,232,0.4); }
+.card-blue .card-title { color: var(--blue); }
+.card-green { border-color: rgba(62,207,142,0.4); }
+.card-green .card-title { color: var(--green); }
+.card-orange { border-color: rgba(245,166,35,0.4); }
+.card-orange .card-title { color: var(--orange); }
+.card-red { border-color: rgba(232,95,95,0.4); }
+.card-red .card-title { color: var(--red); }
+.card-purple { border-color: rgba(167,139,250,0.4); }
+.card-purple .card-title { color: var(--purple); }
+.card-cyan { border-color: rgba(34,211,238,0.4); }
+.card-cyan .card-title { color: var(--cyan); }
+.card-yellow { border-color: rgba(245,215,110,0.4); }
+.card-yellow .card-title { color: var(--yellow); }
+.card-pink { border-color: rgba(244,114,182,0.4); }
+.card-pink .card-title { color: var(--pink); }
+
+/* === 流程图样式 === */
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flow-node {
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  min-width: 110px;
+  border: 1.5px solid;
+  white-space: nowrap;
+}
+
+.flow-node.blue { background: var(--blue-bg); border-color: var(--blue); color: var(--blue); }
+.flow-node.green { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.flow-node.orange { background: var(--orange-bg); border-color: var(--orange); color: var(--orange); }
+.flow-node.purple { background: var(--purple-bg); border-color: var(--purple); color: var(--purple); }
+.flow-node.cyan { background: var(--cyan-bg); border-color: var(--cyan); color: var(--cyan); }
+.flow-node.white { background: var(--card); border-color: var(--border); color: var(--text); }
+.flow-node.red { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+.flow-node.yellow { background: var(--yellow-bg); border-color: var(--yellow); color: var(--yellow); }
+
+.flow-arrow {
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.flow-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: -4px;
+}
+
+/* === 表格 === */
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tbl th, .tbl td {
+  padding: 10px 14px;
+  text-align: left;
+  border: 1px solid var(--border);
+}
+
+.tbl th {
+  background: var(--blue-bg);
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+.tbl td { background: var(--card); color: var(--text); }
+.tbl tr:hover td { background: #1f2333; }
+
+/* === 评分仪表 === */
+.dim-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.dim-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 14px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.dim-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(79,141,232,0.15);
+}
+
+.dim-icon { font-size: 32px; margin-bottom: 8px; }
+.dim-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.dim-score { font-size: 22px; font-weight: 800; color: var(--green); }
+.dim-rule { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+/* === 评分等级 === */
+.score-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.score-card {
+  border-radius: 12px;
+  padding: 18px 14px;
+  border: 2px solid;
+  text-align: center;
+}
+
+.score-card.excellent { background: var(--green-bg); border-color: var(--green); }
+.score-card.good { background: var(--yellow-bg); border-color: var(--yellow); }
+.score-card.poor { background: var(--orange-bg); border-color: var(--orange); }
+.score-card.fail { background: var(--red-bg); border-color: var(--red); }
+
+.score-range { font-size: 22px; font-weight: 800; }
+.score-card.excellent .score-range { color: var(--green); }
+.score-card.good .score-range { color: var(--yellow); }
+.score-card.poor .score-range { color: var(--orange); }
+.score-card.fail .score-range { color: var(--red); }
+
+.score-name { font-size: 14px; font-weight: 700; margin-top: 4px; }
+.score-card.excellent .score-name { color: var(--green); }
+.score-card.good .score-name { color: var(--yellow); }
+.score-card.poor .score-name { color: var(--orange); }
+.score-card.fail .score-name { color: var(--red); }
+
+.score-action { font-size: 11px; margin-top: 6px; color: var(--muted); line-height: 1.5; }
+
+/* === 硬约束 === */
+.constraint-list { display: flex; flex-direction: column; gap: 10px; }
+.constraint-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: all 0.2s;
+}
+
+.constraint-item:hover {
+  border-color: var(--border);
+  transform: translateX(3px);
+}
+
+.constraint-item.c1 { border-left-color: var(--red); }
+.constraint-item.c2 { border-left-color: var(--orange); }
+.constraint-item.c3 { border-left-color: var(--yellow); }
+.constraint-item.c4 { border-left-color: var(--green); }
+.constraint-item.c5 { border-left-color: var(--blue); }
+
+.constraint-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.c1 .constraint-num { background: var(--red-bg); color: var(--red); border: 1px solid var(--red); }
+.c2 .constraint-num { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange); }
+.c3 .constraint-num { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow); }
+.c4 .constraint-num { background: var(--green-bg); color: var(--green); border: 1px solid var(--green); }
+.c5 .constraint-num { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue); }
+
+.constraint-content {}
+.constraint-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.constraint-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* === 章节条 === */
+.chapter-bar {
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+  margin-top: 16px;
+}
+
+.chapter-seg {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 4px;
+  border-radius: 8px;
+  font-size: 11px;
+  text-align: center;
+  min-width: 0;
+  border: 1px solid;
+}
+
+.chapter-seg.must { background: var(--blue-bg); border-color: var(--blue); color: var(--blue); }
+.chapter-seg.adv { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.chapter-seg.opt { background: var(--purple-bg); border-color: var(--purple); color: var(--purple); }
+.chapter-seg.auto { background: var(--cyan-bg); border-color: var(--cyan); color: var(--cyan); }
+
+.chapter-num { font-weight: 800; font-size: 14px; white-space: nowrap; }
+.chapter-name { font-size: 9px; opacity: 0.75; margin-top: 2px; }
+
+.chapter-legend {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.chapter-legend span { display: flex; align-items: center; gap: 6px; }
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 3px;
+}
+.legend-dot.blue { background: var(--blue); }
+.legend-dot.green { background: var(--green); }
+.legend-dot.purple { background: var(--purple); }
+.legend-dot.cyan { background: var(--cyan); }
+
+/* === 字号规范 === */
+.font-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.font-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.font-sample {
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  margin-bottom: 6px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.font-name { font-size: 11px; color: var(--muted); }
+.font-size { font-size: 11px; color: var(--blue); font-weight: 600; margin-top: 2px; }
+.font-bold { font-weight: 700; }
+
+/* === 文件树 === */
+.file-tree {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  font-size: 12.5px;
+  line-height: 2;
+  color: var(--text);
+}
+
+.ft-folder { color: var(--yellow); }
+.ft-file { color: var(--text); }
+.ft-md { color: var(--green); }
+.ft-key { color: var(--orange); font-weight: 700; }
+.ft-html { color: var(--cyan); }
+.ft-indent { display: inline-block; width: 24px; color: var(--border); }
+
+/* === 反失败纠偏 === */
+.script-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.script-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.script-panel-header {
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.script-panel-header.ai { background: var(--green-bg); color: var(--green); border-bottom: 2px solid var(--green); }
+.script-panel-header.pm { background: var(--red-bg); color: var(--red); border-bottom: 2px solid var(--red); }
+
+.script-panel-body {
+  padding: 14px 16px;
+}
+
+.script-item {
+  padding: 8px 12px;
+  background: var(--card2);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  border-left: 3px solid;
+}
+
+.script-item:last-child { margin-bottom: 0; }
+.script-item.green { border-left-color: var(--green); }
+.script-item.red { border-left-color: var(--red); }
+
+.script-phrase { color: var(--yellow); font-weight: 600; font-size: 11px; margin-bottom: 2px; }
+.script-action { color: var(--muted); line-height: 1.5; }
+
+/* === 演化时间线 === */
+.timeline {
+  position: relative;
+  padding-left: 24px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.tl-item {
+  position: relative;
+  padding: 8px 0;
+  padding-left: 20px;
+}
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 16px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--blue-bg);
+  border: 2px solid var(--blue);
+}
+
+.tl-version {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.tl-date {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+
+.tl-desc {
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* === 底部 === */
+.footer {
+  text-align: center;
+  padding: 30px;
+  color: var(--muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+
+.footer a { color: var(--blue); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+@media (max-width: 1024px) {
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr 1fr; }
+  .four-col { grid-template-columns: 1fr 1fr; }
+  .dim-grid { grid-template-columns: repeat(3, 1fr); }
+  .score-cards { grid-template-columns: 1fr 1fr; }
+  .font-grid { grid-template-columns: repeat(3, 1fr); }
+  .script-grid { grid-template-columns: 1fr; }
+  .chapter-bar { flex-wrap: wrap; }
+  .chapter-seg { min-width: calc(33% - 4px); }
+}
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 28px; }
+  .hero-stats { gap: 20px; }
+  .three-col { grid-template-columns: 1fr; }
+  .four-col { grid-template-columns: 1fr; }
+  .dim-grid { grid-template-columns: repeat(2, 1fr); }
+  .font-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== 英雄区 ==================== -->
+<div class="hero">
+  <div class="hero-badge">⚡ Skill · TRS系统</div>
+  <h1>功能设计文档编写</h1>
+  <p class="hero-desc">
+    AI辅助编写企业级追溯系统（Traceability & Recall System）功能设计文档的完整方法论。<br>
+    连接业务需求与技术实现，让双方都能看懂、都能用。
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">1.0</div>
+      <div class="hero-stat-label">当前版本</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">2</div>
+      <div class="hero-stat-label">工作模式</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">核心原则</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">质控维度</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">12</div>
+      <div class="hero-stat-label">文档章节</div>
+    </div>
+  </div>
+  <div class="hero-tags">
+    <span class="hero-tag b1">🎯 业务+开发双读者</span>
+    <span class="hero-tag b2">🔀 原型驱动</span>
+    <span class="hero-tag b3">🛡️ 质控门</span>
+    <span class="hero-tag b4">📊 数据项11列规范</span>
+    <span class="hero-tag b5">📋 验收优先</span>
+  </div>
+</div>
+
+<!-- ==================== 主体 ==================== -->
+<div class="container">
+
+<!-- ==================== 一、解决什么问题 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">01</div>
+  <div class="section-title">解决什么问题？</div>
+  <div class="section-sub">Why · 5个典型痛点与解法</div>
+</div>
+<div class="three-col">
+  <div class="card card-orange">
+    <div class="card-icon">💢</div>
+    <div class="card-title" style="color:var(--orange)">聊得开心，写出来不是那个意思</div>
+    <div class="card-body">需求讨论时很顺畅，写成文档后实现时发现各种歧义</div>
+    <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12px;">
+      <span style="color:var(--green)">✅ 解：</span>强制5W1H框架 + 逐字段确认
+    </div>
+  </div>
+  <div class="card card-red">
+    <div class="card-icon">💢</div>
+    <div class="card-title" style="color:var(--red)">边界没定义，实现时发现各种坑</div>
+    <div class="card-body">字段校验、异常流程、超时处理全靠猜，开发过程反复返工</div>
+    <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12px;">
+      <span style="color:var(--green)">✅ 解：</span>数据项11列规范 + 校验3要素 + 报错模板
+    </div>
+  </div>
+  <div class="card card-pink">
+    <div class="card-icon">💢</div>
+    <div class="card-title" style="color:var(--pink)">追溯系统特殊性，新手容易遗漏</div>
+    <div class="card-body">谱系关系、召回演练、审计留痕等非CRUD内容被当成普通功能写</div>
+    <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12px;">
+      <span style="color:var(--green)">✅ 解：</span>追溯领域6大补充项强制覆盖
+    </div>
+  </div>
+  <div class="card card-yellow">
+    <div class="card-icon">💢</div>
+    <div class="card-title" style="color:var(--yellow)">写完才发现缺字段/缺验收标准</div>
+    <div class="card-body">文档交出去了，开发说字段定义不全，验收标准一条都没有</div>
+    <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12px;">
+      <span style="color:var(--green)">✅ 解：</span>PRD自检质控门，每章写完自动评分，缺口当场补
+    </div>
+  </div>
+  <div class="card card-purple">
+    <div class="card-icon">💢</div>
+    <div class="card-title" style="color:var(--purple)">业务和开发混写，谁都看不懂</div>
+    <div class="card-body">业务人员看不懂JSON，开发看不懂业务语言，两边都抱怨</div>
+    <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12px;">
+      <span style="color:var(--green)">✅ 解：</span>接口契约业务化 + 分层章节结构
+    </div>
+  </div>
+  <div class="card card-blue">
+    <div class="card-icon">💡</div>
+    <div class="card-title" style="color:var(--blue)">一个Skill，适用所有复杂度</div>
+    <div class="card-body">A档（简单CRUD）到C档（跨多系统召回审计），按档位自动裁剪展开深度</div>
+    <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12px;">
+      <span style="color:var(--green)">✅ 解：</span>范围裁剪决策树（只裁深度，不裁硬字段）
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== 二、两种工作模式 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">02</div>
+  <div class="section-title">两种工作模式</div>
+  <div class="section-sub">How · 模式选择取决于输入类型</div>
+</div>
+<div class="two-col">
+  <div class="card card-blue">
+    <div class="card-icon">💬</div>
+    <div class="card-title" style="color:var(--blue)">模式A：传统需求沟通</div>
+    <div class="card-body" style="margin-bottom:16px;">适用于用户口头描述业务需求，通过5W1H框架深度挖掘</div>
+    <div style="background:var(--card2); border-radius:10px; padding:16px;">
+      <div class="flow" style="justify-content:flex-start;">
+        <div class="flow-node blue" style="min-width:90px;">📋 确认格式</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node white" style="min-width:90px;">🎯 问题定义</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node white" style="min-width:90px;">🔍 深度挖掘</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node blue" style="min-width:90px;">✍️ 引导编写</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node cyan" style="min-width:90px;">🛡️ 质控门</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:12px; color:var(--muted);">
+      触发：用户口头描述 / 会议纪要 / 从零需求
+    </div>
+  </div>
+  <div class="card card-green">
+    <div class="card-icon">⭐</div>
+    <div class="card-title" style="color:var(--green)">模式B：原型驱动（推荐）</div>
+    <div class="card-body" style="margin-bottom:16px;">用户提供HTML/图片/Figma设计稿，AI先理解原型，再生成PRD</div>
+    <div style="background:var(--card2); border-radius:10px; padding:16px;">
+      <div class="flow" style="justify-content:flex-start;">
+        <div class="flow-node green" style="min-width:80px;">📥 接收原型</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node white" style="min-width:80px;">🔎 分析结构</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node green" style="min-width:80px;">📝 输出摘要</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node white" style="min-width:80px;">✅ 用户确认</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node green" style="min-width:80px;">✍️ 编写PRD</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node cyan" style="min-width:80px;">🛡️ 质控门</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:12px; color:var(--muted);">
+      触发：用户提供HTML / 图片 / Figma文件，或说"给你原型"
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== 三、五大核心原则 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">03</div>
+  <div class="section-title">五大核心原则</div>
+  <div class="section-sub">Principles · 不可妥协的铁律</div>
+</div>
+<div class="constraint-list">
+  <div class="constraint-item c1">
+    <div class="constraint-num">🚫</div>
+    <div class="constraint-content">
+      <div class="constraint-title">证据优于断言</div>
+      <div class="constraint-desc">每个设计决策必须有来源：用户确认的→标注"用户确认"；按假设写的→标注"假设+风险等级"；没有来源的→不能写进文档。"我觉得"不等于"已确认"。</div>
+    </div>
+  </div>
+  <div class="constraint-item c2">
+    <div class="constraint-num">📖</div>
+    <div class="constraint-content">
+      <div class="constraint-title">接口契约面向双读者</div>
+      <div class="constraint-desc">不展示HTTP方法/URL路径/原始JSON。文档里写：操作名称、用途、字段含义、业务校验规则——业务人员和开发都能看懂，技术细节由后端工程师自行补充。</div>
+    </div>
+  </div>
+  <div class="constraint-item c3">
+    <div class="constraint-num">📊</div>
+    <div class="constraint-content">
+      <div class="constraint-title">数据项必须完整（11列规范）</div>
+      <div class="constraint-desc">每个字段定义11个属性：字段名 / 控件类型 / 数值类型 / 长度 / 必输 Y/N / 新增 Y/N / 编辑 Y/N / 值列表说明 / 默认值 / 校验规则 / 其他说明。留空必须有理由。</div>
+    </div>
+  </div>
+  <div class="constraint-item c4">
+    <div class="constraint-num">🔗</div>
+    <div class="constraint-content">
+      <div class="constraint-title">追溯领域补充项必须覆盖</div>
+      <div class="constraint-desc">6大领域（追溯谱系 / 召回演练 / 质量放行 / 条码标签 / 审计留痕 / 集成一致性）至少命中一项并写进文档；如果真的不涉及，必须写明"明确不适用原因"。</div>
+    </div>
+  </div>
+  <div class="constraint-item c5">
+    <div class="constraint-num">🛡️</div>
+    <div class="constraint-content">
+      <div class="constraint-title">写完必须自检（质控门）</div>
+      <div class="constraint-desc">每完成一个关键章节，AI自动触发质控评估。能自己修的当场修；修不了的写入"假设与待确认"表，标注优先级，让PM去确认。写作者自己不知道的不等于产品经理也知道。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== 四、PRD自检质控门 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">04</div>
+  <div class="section-title">PRD自检质控门</div>
+  <div class="section-sub">Quality Gate · 5维度自动评分</div>
+</div>
+
+<!-- 触发时机 -->
+<div style="margin-bottom:20px;">
+  <div style="font-size:13px; font-weight:700; color:var(--muted); margin-bottom:10px;">触发时机（完成以下节点后自动触发）</div>
+  <div class="flow">
+    <div class="flow-node white">第2章 用户与价值</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node white">第3章 业务背景</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node white">第5章 功能列表</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node white">第7章 详细设计</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node white">全文初稿</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node cyan">📋 质控报告</div>
+  </div>
+</div>
+
+<!-- 5维度 -->
+<div style="font-size:13px; font-weight:700; color:var(--muted); margin-bottom:10px;">评估维度（5维度 × 20分 = 100分）</div>
+<div class="dim-grid">
+  <div class="dim-card">
+    <div class="dim-icon">①</div>
+    <div class="dim-name">完整性</div>
+    <div class="dim-score">20分</div>
+    <div class="dim-rule">所有必填章节是否齐备？<br>缺→-10/处</div>
+  </div>
+  <div class="dim-card">
+    <div class="dim-icon">②</div>
+    <div class="dim-name">无歧义</div>
+    <div class="dim-score">20分</div>
+    <div class="dim-rule">模糊词/二义性？<br>每处-5</div>
+  </div>
+  <div class="dim-card">
+    <div class="dim-icon">③</div>
+    <div class="dim-name">可追踪</div>
+    <div class="dim-score">20分</div>
+    <div class="dim-rule">功能→验收→详细设计<br>是否对齐？缺→-10/处</div>
+  </div>
+  <div class="dim-card">
+    <div class="dim-icon">④</div>
+    <div class="dim-name">一致性</div>
+    <div class="dim-score">20分</div>
+    <div class="dim-rule">跨章节命名统一？<br>每处-5</div>
+  </div>
+  <div class="dim-card">
+    <div class="dim-icon">⑤</div>
+    <div class="dim-name">数据项<br>完整性</div>
+    <div class="dim-score">20分</div>
+    <div class="dim-rule">11列表格有留空？<br>每行-5</div>
+  </div>
+</div>
+
+<!-- 评分等级 -->
+<div style="font-size:13px; font-weight:700; color:var(--muted); margin: 20px 0 10px;">评分等级与处置</div>
+<div class="score-cards">
+  <div class="score-card excellent">
+    <div class="score-range">90-100</div>
+    <div class="score-name">🟢 优秀</div>
+    <div class="score-action">直接提交<br>可选标注亮点章节</div>
+  </div>
+  <div class="score-card good">
+    <div class="score-range">70-89</div>
+    <div class="score-name">🟡 良好</div>
+    <div class="score-action">AI自修所有"可自完善"项<br>重评后剩余→PM确认</div>
+  </div>
+  <div class="score-card poor">
+    <div class="score-range">50-69</div>
+    <div class="score-name">🟠 需改进</div>
+    <div class="score-action">修明显缺口<br>剩余全写假设表，告知PM</div>
+  </div>
+  <div class="score-card fail">
+    <div class="score-range">&lt;50</div>
+    <div class="score-name">🔴 不合格</div>
+    <div class="score-action">停止，说明核心缺口<br>请PM补充信息后再继续</div>
+  </div>
+</div>
+
+<!-- 自完善 vs 标注PM -->
+<div style="font-size:13px; font-weight:700; color:var(--muted); margin: 20px 0 10px;">自完善 vs. 标注PM 的判断规则</div>
+<div class="script-grid">
+  <div class="script-panel">
+    <div class="script-panel-header ai">✅ AI自行修复（能修则修）</div>
+    <div class="script-panel-body">
+      <div class="script-item green">
+        <div class="script-phrase">字段描述歧义</div>
+        <div class="script-action">→ 用更精确的描述替换</div>
+      </div>
+      <div class="script-item green">
+        <div class="script-phrase">命名前后不一致</div>
+        <div class="script-action">→ 统一命名+全局替换</div>
+      </div>
+      <div class="script-item green">
+        <div class="script-phrase">数据项表格留空</div>
+        <div class="script-action">→ 联系上下文推断，以假设补充</div>
+      </div>
+      <div class="script-item green">
+        <div class="script-phrase">缺少验收标准</div>
+        <div class="script-action">→ 自行推导3条 Given/When/Then</div>
+      </div>
+    </div>
+  </div>
+  <div class="script-panel">
+    <div class="script-panel-header pm">❗ 必须标注PM（不能自填）</div>
+    <div class="script-panel-body">
+      <div class="script-item red">
+        <div class="script-phrase">涉及业务决策</div>
+        <div class="script-action">→ 优先级/审批/超时阈值，由PM定</div>
+      </div>
+      <div class="script-item red">
+        <div class="script-phrase">涉及外部依赖</div>
+        <div class="script-action">→ 第三方接口/数据来源，不在团队内</div>
+      </div>
+      <div class="script-item red">
+        <div class="script-phrase">涉及特殊权限</div>
+        <div class="script-action">→ 未经明确授权的角色操作，需安全确认</div>
+      </div>
+      <div class="script-item red">
+        <div class="script-phrase">业务规则无文档支撑</div>
+        <div class="script-action">→ 无法从上下文推断的数值/逻辑</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== 五、文档章节结构 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">05</div>
+  <div class="section-title">PRD文档章节结构</div>
+  <div class="section-sub">Structure · 12章标准结构</div>
+</div>
+<div class="chapter-bar">
+  <div class="chapter-seg must"><div class="chapter-num">1</div><div class="chapter-name">文档控制</div></div>
+  <div class="chapter-seg must"><div class="chapter-num">2</div><div class="chapter-name">问题定义<br>5W1H</div></div>
+  <div class="chapter-seg must"><div class="chapter-num">3</div><div class="chapter-name">业务背景<br>+流程</div></div>
+  <div class="chapter-seg must"><div class="chapter-num">4</div><div class="chapter-name">总体设计<br>+功能列表</div></div>
+  <div class="chapter-seg must"><div class="chapter-num">5</div><div class="chapter-name">功能列表<br>+验收标准</div></div>
+  <div class="chapter-seg must"><div class="chapter-num">6</div><div class="chapter-name">界面流转<br>+页面原型</div></div>
+  <div class="chapter-seg must"><div class="chapter-num">7</div><div class="chapter-name">详细设计<br>数据项+接口</div></div>
+  <div class="chapter-seg adv"><div class="chapter-num">8</div><div class="chapter-name">非功能<br>需求</div></div>
+  <div class="chapter-seg adv"><div class="chapter-num">9</div><div class="chapter-name">发布计划<br>+成功度量</div></div>
+  <div class="chapter-seg opt"><div class="chapter-num">10</div><div class="chapter-name">协作<br>管理</div></div>
+  <div class="chapter-seg opt"><div class="chapter-num">11</div><div class="chapter-name">假设<br>待确认</div></div>
+  <div class="chapter-seg auto"><div class="chapter-num">🛡️</div><div class="chapter-name">质控报告<br>自动追加</div></div>
+</div>
+<div class="chapter-legend">
+  <span><div class="legend-dot blue"></div>必填</span>
+  <span><div class="legend-dot green"></div>建议</span>
+  <span><div class="legend-dot purple"></div>可选</span>
+  <span><div class="legend-dot cyan"></div>自动追加</span>
+</div>
+</div>
+
+<!-- ==================== 六、数据项规范 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">06</div>
+  <div class="section-title">数据项规范（11列标准格式）</div>
+  <div class="section-sub">Data Fields · 字段级精确定义</div>
+</div>
+<table class="tbl">
+  <tr>
+    <th>序号</th><th>字段名</th><th>控件类型</th><th>数值类型</th><th>长度</th><th>必输</th><th>新增</th><th>编辑</th><th>值列表说明</th><th>默认值</th><th>校验规则</th><th>其他说明</th>
+  </tr>
+  <tr>
+    <td>1</td><td>示例字段</td><td>文本</td><td>字符</td><td>200</td><td>Y</td><td>Y</td><td>N</td><td>-</td><td>-</td><td>不能为空</td><td>创建后只读</td>
+  </tr>
+</table>
+
+<div class="two-col" style="margin-top:16px;">
+  <div class="card">
+    <div class="card-icon">🔤</div>
+    <div class="card-title">字段类型命名（中文统一）</div>
+    <table class="tbl" style="margin-top:10px;">
+      <tr><th>数据库类型</th><th>PRD写法</th></tr>
+      <tr><td>VARCHAR</td><td>字符（需标长度）</td></tr>
+      <tr><td>INT</td><td>整数（可标范围）</td></tr>
+      <tr><td>DECIMAL</td><td>小数（标精度）</td></tr>
+      <tr><td>DATE</td><td>日期（YYYY-MM-DD）</td></tr>
+      <tr><td>DATETIME</td><td>日期时间（HH:mm:ss）</td></tr>
+      <tr><td>BOOLEAN</td><td>布尔（是/否）</td></tr>
+      <tr><td>TEXT</td><td>长文本</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-icon">📝</div>
+    <div class="card-title">新增/编辑 Y/N 填写规则</div>
+    <table class="tbl" style="margin-top:10px;">
+      <tr><th>页面类型</th><th>新增</th><th>编辑</th></tr>
+      <tr><td>只读详情页</td><td>N</td><td>N</td></tr>
+      <tr><td>新建表单</td><td>Y</td><td>N</td></tr>
+      <tr><td>编辑表单</td><td>N</td><td>Y</td></tr>
+      <tr><td>创建后只读</td><td>Y</td><td>N</td></tr>
+      <tr><td>灰显但可见</td><td>Y</td><td>N（灰显）</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ==================== 七、Word导出规范 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">07</div>
+  <div class="section-title">Word导出字号规范（微软雅黑）</div>
+  <div class="section-sub">Typography · 导出后层次感</div>
+</div>
+<div class="font-grid">
+  <div class="font-card">
+    <div class="font-sample" style="font-size:28px; font-weight:700;">H1</div>
+    <div class="font-name">一级标题</div>
+    <div class="font-size">18pt · 加粗</div>
+  </div>
+  <div class="font-card">
+    <div class="font-sample" style="font-size:22px; font-weight:700;">H2</div>
+    <div class="font-name">二级标题</div>
+    <div class="font-size">14pt · 加粗</div>
+  </div>
+  <div class="font-card">
+    <div class="font-sample" style="font-size:18px; font-weight:700;">H3</div>
+    <div class="font-name">三级标题</div>
+    <div class="font-size">12pt · 加粗</div>
+  </div>
+  <div class="font-card">
+    <div class="font-sample" style="font-size:15px;">正文内容</div>
+    <div class="font-name">段落正文</div>
+    <div class="font-size">10pt · 常规</div>
+  </div>
+  <div class="font-card">
+    <div class="font-sample" style="font-size:13px;">表格内容</div>
+    <div class="font-name">表格内文字</div>
+    <div class="font-size">小五（9pt）· 常规</div>
+  </div>
+  <div class="font-card">
+    <div class="font-sample" style="font-size:13px;">页眉 / 页脚</div>
+    <div class="font-name">页眉页脚</div>
+    <div class="font-size">小五（9pt）· 常规</div>
+  </div>
+</div>
+<div style="margin-top:14px; padding:14px; background:var(--card); border:1px solid var(--border); border-radius:10px; font-size:13px;">
+  <div style="color:var(--text); font-weight:600; margin-bottom:6px;">📋 表格样式：全包黑色框线 + 表头浅蓝底色（#D9E2F3）</div>
+  <div style="color:var(--muted);">Typora导出：偏好设置 → 导出Word → 勾选"使用pandoc模板" → 指定 <code style="background:var(--blue-bg); color:var(--blue); padding:2px 8px; border-radius:4px;">reference.docx</code> 路径</div>
+</div>
+</div>
+
+<!-- ==================== 八、范围裁剪决策树 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">08</div>
+  <div class="section-title">范围裁剪决策树</div>
+  <div class="section-sub">Scale · 只裁"展开深度"，不裁"硬字段"</div>
+</div>
+<div class="three-col">
+  <div class="card card-green">
+    <div class="card-icon">A</div>
+    <div class="card-title" style="color:var(--green)">A档 · 小型</div>
+    <div class="card-body" style="margin-bottom:12px;">无谱系拆分/召回/审计更正/离线补传/跨多系统，仅基本CRUD</div>
+    <div style="background:var(--card2); border-radius:8px; padding:10px; font-size:12px;">
+      <div style="color:var(--green)">8/9章 →</div>简版即可<br>
+      <div style="color:var(--purple)">10/11章 →</div>可不写
+    </div>
+  </div>
+  <div class="card card-yellow">
+    <div class="card-icon">B</div>
+    <div class="card-title" style="color:var(--yellow)">B档 · 中型</div>
+    <div class="card-body" style="margin-bottom:12px;">涉及A档中1-2项，或存在关键业务链路</div>
+    <div style="background:var(--card2); border-radius:8px; padding:10px; font-size:12px;">
+      <div style="color:var(--green)">8/9章 →</div>标准版<br>
+      <div style="color:var(--yellow)">10章 →</div>建议写<br>
+      <div style="color:var(--purple)">11章 →</div>可选
+    </div>
+  </div>
+  <div class="card card-red">
+    <div class="card-icon">C</div>
+    <div class="card-title" style="color:var(--red)">C档 · 大型</div>
+    <div class="card-body" style="margin-bottom:12px;">涉及≥2项，或跨ERP/MES/WMS/QMS/PLM多系统一致性</div>
+    <div style="background:var(--card2); border-radius:8px; padding:10px; font-size:12px;">
+      <div style="color:var(--green)">8/9章 →</div>标准或更细<br>
+      <div style="color:var(--yellow)">10/11章 →</div>至少写一个
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== 九、文件结构 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">09</div>
+  <div class="section-title">Skill文件结构</div>
+  <div class="section-sub">File Tree · 仓库内容一览</div>
+</div>
+<div class="file-tree">
+<div style="margin-bottom:4px;"><span class="ft-folder">📁 追溯系统-功能设计文档编写/</span></div>
+<div><span class="ft-indent"></span><span class="ft-key ft-file">📄 SKILL.md</span> <span style="color:var(--muted)">← ⭐ 主文件（加载此文件）</span></div>
+<div><span class="ft-indent"></span><span class="ft-file ft-md">📄 CHECKLIST_V2.0.md</span> <span style="color:var(--muted)">质量检查清单</span></div>
+<div><span class="ft-indent"></span><span class="ft-file ft-md">📄 README.md</span> <span style="color:var(--muted)">使用说明（你在这里）</span></div>
+<div><span class="ft-indent"></span><span class="ft-file ft-md">📄 CHANGELOG.md</span> <span style="color:var(--muted)">更新日志</span></div>
+<div><span class="ft-indent"></span><span class="ft-key">📄 VISUAL_README.html</span> <span style="color:var(--muted)">← 🎨 可视化全览图（浏览器打开）</span></div>
+<div><span class="ft-indent"></span><span class="ft-key">📄 reference.docx</span> <span style="color:var(--muted)">← Word导出模板</span></div>
+<div><span class="ft-indent"></span><span class="ft-folder">📁 reference/</span></div>
+<div><span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-file ft-md">📄 templates.md</span> <span style="color:var(--muted)">11个文档模板</span></div>
+<div><span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-file ft-md">📄 prototype-driven.md</span> <span style="color:var(--muted)">⭐原型驱动详细指南</span></div>
+<div><span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-file ft-md">📄 traceability-domain.md</span> <span style="color:var(--muted)">追溯领域模板</span></div>
+<div><span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-file ft-md">📄 document-structure.md</span></div>
+<div><span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-file ft-md">📄 examples.md</span></div>
+<div><span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-file ft-md">📄 tools.md</span></div>
+<div><span class="ft-indent"></span><span class="ft-folder">📁 testing/</span></div>
+<div><span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-file ft-md">📄 pressure-scenarios.md</span></div>
+</div>
+</div>
+
+<!-- ==================== 十、演化历史 ==================== -->
+<div class="section">
+<div class="section-header">
+  <div class="section-num">10</div>
+  <div class="section-title">版本信息</div>
+  <div class="section-sub">Version · V1.0 首次公开发布（公测）</div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-icon">📅</div>
+    <div class="card-title">V1.0 · 首次公开发布</div>
+    <div class="card-body" style="margin-top:12px; color:var(--muted); font-size:13px; line-height:1.8;">
+      <ul>
+        <li>两种工作模式（传统沟通 + 原型驱动）</li>
+        <li>五大核心原则（证据优于断言 / 接口双读者 / 11列规范 / 追溯领域覆盖 / 质控门）</li>
+        <li>PRD自检质控门（5维度自动评分）</li>
+        <li>12章标准文档结构</li>
+        <li>Word导出模板（微软雅黑 + 全包框线）</li>
+        <li>范围裁剪决策树（A/B/C三档）</li>
+        <li>反失败纠偏脚本（8种施压场景）</li>
+      </ul>
+    </div>
+    <div style="margin-top:14px; padding:10px 14px; background:var(--green-bg); border:1px solid var(--green); border-radius:8px; font-size:12px; color:var(--green);">
+      🎉 首次对外发布，欢迎使用并反馈！
+    </div>
+  </div>
+  <div class="card card-blue">
+    <div class="card-icon">🔮</div>
+    <div class="card-title">未来规划</div>
+    <div class="card-body" style="margin-top:16px;">
+      <ul>
+        <li>支持更多场景的模板（报表导出 / 审批流 / 移动端适配）</li>
+        <li>验收标准自动生成助手（Given/When/Then批量输出）</li>
+        <li>接口契约模板（各系统对接规范库）</li>
+        <li>英文版README（国际团队协作）</li>
+        <li>Skill性能评测报告（定期review）</li>
+      </ul>
+    </div>
+    <div style="margin-top:16px; padding:12px; background:var(--card2); border-radius:8px; text-align:center;">
+      <div style="font-size:13px; font-weight:700; color:var(--blue);">欢迎贡献！</div>
+      <div style="font-size:12px; color:var(--muted); margin-top:4px;">
+        GitHub: github.com/HUHU19961014/Trs-prd-skill
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- container -->
+
+<!-- ==================== 底部 ==================== -->
+<div class="footer">
+  <div style="margin-bottom:8px;">
+    <strong>TRS系统 功能设计文档编写 Skill</strong> · V1.0 · 2026-04-11（首次公开发布）
+  </div>
+  <div>
+    基于 <a href="#">企业顾问团队标准</a> + GitHub热门PRD模板 + 追溯系统行业最佳实践
+  </div>
+</div>
+
+</body>
+</html>
