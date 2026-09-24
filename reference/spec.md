@@ -73,7 +73,7 @@
 ### 3.1 `INTERNAL` 模式：开发实现 12 列
 
 ```markdown
-> 📌 **数据项 12 列 / 字段类型 / 控件类型的唯一权威**：`trs-spec-style/reference/data-item-spec.md`（纪律层 SSOT）。本处为速查或示例，两套口径勿混用。
+> 📌 **数据项 12 列 / 字段类型 / 控件类型的唯一权威**：`../trs-spec-style/reference/data-item-spec.md`（纪律层 SSOT）。本处为速查或示例，两套口径勿混用。
 | 序号 | 字段名 | 控件类型 | 数值类型 | 长度 | 必输 Y/N | 新增 Y/N | 编辑 Y/N | 值列表说明 | 默认值 | 校验规则 | 其他说明 |
 ```
 
@@ -88,7 +88,7 @@
 
 - 字段类型一律中文命名（文本 / 长文本 / 数字 / 小数 / 日期 / 日期时间 / 布尔 / 下拉单选 / 下拉多选 / 枚举 / 附件 / 图片），不写数据库类型。
 - 报错文案取真实前端 / 后端返回串，走 `trs-evidence` L3 级。
-- 完整填写规则 → `trs-spec-style/reference/data-item-spec.md`。
+- 完整填写规则 → `../trs-spec-style/reference/data-item-spec.md`。
 
 ---
 

@@ -45,9 +45,17 @@ pandoc input.md -o output.docx
 pandoc input.md --reference-doc=reference.docx --toc --toc-depth=3 -o output.docx
 ```
 
-- 备选：`md-to-office` skill（同样基于 pandoc，产物一致）
-- 备选：内置 `docx` skill 直接生成（格式控制更精确，适合定制需求）
-- **钉钉云文档不走 pandoc**：回写走 `dingtalk-doc-writeback`，调用纪律走 `dingtalk-doc-calling`
+- **逃生通道**：需要精确控制版式时用内置 `docx` skill。**除此之外不再引入第三条路** —— 并列多个选项会让人不知道选哪个。
+
+**钉钉云文档不走 pandoc**：
+
+| 环节 | 走 |
+|---|---|
+| 落稿与回写 | `dingtalk-doc-writeback` |
+| 调用纪律（限流 / 分页 / 回读解码 / 写前快照） | `dingtalk-doc-calling` |
+| `dws` 命令找不到（`command not found`） | `dingtalk-doc-calling` §0 —— dws 不在 PATH，须 node 直连或走已建好的 shim |
+
+> ☁️ 云文档出口是**抽象出口**。本文件只写"云文档"，具体厂商（当前项目为钉钉）由项目层决定，不写进通用流程。
 
 ---
 
