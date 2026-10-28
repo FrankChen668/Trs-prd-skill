@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>调研原型</title></head>
+<body>
+<nav>
+  <button type="button" onclick="renderPage('调研任务')">调研任务</button>
+  <button type="button" onclick="renderPage('问卷模板')">问卷模板</button>
+  <button type="button" onclick="renderPage('供应商填报')">供应商填报</button>
+</nav>
+<main id="host"></main>
+<script>
+const tasks = [
+  { id: "SUR-001", name: "2026Q4冲突矿产调查", deadline: "2026-12-31",
+    branches: [{ status: "已撤回" }, { status: "已驳回" }] }
+];
+
+const templates = [
+  { name: "冲突矿产调查模板", category: "冲突矿产调查", version: "V1.0", status: "启用" }
+];
+
+function taskStatus(branches) {
+  if (!branches.length) return "已发放";
+  if (branches.every(b => b.status === "已撤回")) return "已撤回";
+  if (branches.every(b => b.status === "已驳回")) return "已驳回";
+  if (branches.every(b => b.status === "已作废")) return "已作废";
+  const active = branches.filter(b => !["已撤回", "已作废", "已驳回"].includes(b.status));
+  if (!active.length) return branches.some(b => b.status === "已撤回") ? "已撤回"
+    : branches.some(b => b.status === "已作废") ? "已作废" : "已驳回";
+  if (active.every(b => b.status === "已通过")) return "已审批";
+  const submitted = active.filter(b => ["已提交", "已通过"].includes(b.status)).length;
+  if (submitted === active.length) return "已提交";
+  if (submitted) return "部分提交";
+  if (branches.some(b => b.status === "已作废")) return "部分作废";
+  if (branches.some(b => b.status === "已撤回")) return "部分撤回";
+  return "已发放";
+}
+
+function detailLabel(status) { return status; }
+function fillLabel(status) {
+  if (status === "已审批") return "已通过";
+  if (status === "已提交") return "审批中";
+  if (status === "已驳回") return "待重提";
+  return status;
+}
+
+function renderTaskPage() {
+  const rows = tasks.map(t => `<tr><td>${t.name}</td><td>${t.deadline}</td><td>${detailLabel(taskStatus(t.branches))}</td></tr>`).join("");
+  document.getElementById("host").innerHTML = `<section><h2>调研任务</h2><table><thead><tr><th>任务名称</th><th>截止日期</th><th>状态</th></tr></thead><tbody>${rows}</tbody></table></section>`;
+}
+
+function renderTemplatePage() {
+  const rows = templates.map(t => `<tr><td>${t.name}</td><td>${t.category}</td><td>${t.version}</td><td>${t.status}</td></tr>`).join("");
+  document.getElementById("host").innerHTML = `<section><h2>问卷模板</h2><table><thead><tr><th>问卷名称</th><th>分类</th><th>版本</th><th>状态</th></tr></thead><tbody>${rows}</tbody></table></section>`;
+}
+
+function renderFillPage() {
+  const rows = tasks.map(t => `<tr><td>${t.name}</td><td>${fillLabel(taskStatus(t.branches))}</td></tr>`).join("");
+  document.getElementById("host").innerHTML = `<section><h2>供应商填报</h2><table><thead><tr><th>任务名称</th><th>状态</th></tr></thead><tbody>${rows}</tbody></table></section>`;
+}
+
+function renderReminderPage() {
+  document.getElementById("host").innerHTML = `<section><h2>催办提醒</h2><p>按当前节点统计待办。</p></section>`;
+}
+
+function renderPage(name) {
+  if (name === "调研任务") renderTaskPage();
+  else if (name === "问卷模板") renderTemplatePage();
+  else if (name === "供应商填报") renderFillPage();
+  else if (name === "催办提醒") renderReminderPage();
+}
+
+renderPage("调研任务");
+</script>
+</body>
+</html>

@@ -1,26 +1,26 @@
 {
   "name": "trs-prd-skill",
-  "version": "4.0.0",
-  "description": "TRS（晶科储能追溯系统）功能设计文档写作 Skill —— 三方糅合自包含单体版（v3.8 + v1.2 + V3.0）",
-  "keywords": ["prd", "functional-spec", "traceability", "trs", "skill", "prompt"],
+  "version": "5.0.2",
+  "description": "面向业务的独立功能设计文档技能：需求承接、原型及补充说明、代码现状还原",
+  "keywords": [
+    "prd",
+    "functional-spec",
+    "traceability",
+    "trs",
+    "skill",
+    "prompt"
+  ],
   "license": "MIT",
-  "main": "build_reference.js",
   "scripts": {
-    "build:reference": "node build_reference.js",
     "test": "node test/check-skill.js"
-  },
-  "devDependencies": {
-    "docx": "^9.7.1"
   },
   "files": [
     "SKILL.md",
     "README.md",
     "CHANGELOG.md",
-    "reference/",
-    "testing/",
-    "reference.docx",
-    "build_reference.js",
-    "赛意logo.png"
+    "references/",
+    "evals/",
+    "test/"
   ],
   "engines": {
     "node": ">=18"

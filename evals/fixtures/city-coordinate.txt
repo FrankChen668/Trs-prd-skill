@@ -1,0 +1,17 @@
+示例代码摘录，仅用于独立技能试用；并非任何生产系统的代码。
+每个“文件”段落以下各行按段内行号定位。只提供摘录，缺失的菜单、网关、存储和运行环境不得推断。
+
+=== city-page.js ===
+1 const queryFields = ['城市编码', '城市名称', '省份', '国家'];
+2 const required = ['城市编码', '城市名称', '城市英译', '省份', '省份英译', '国家', '国家英译', '经度', '纬度', '经度方向', '纬度方向', '是否敏感地区'];
+3 const defaults = { 是否敏感地区: '否' };
+4 function submit(form) { if (required.every(key => form[key])) return request('/city/save', form).then(() => { closeForm(); refreshList(); }); }
+5 function query(filters) { return request('/city/query', filters); }
+
+=== city-handlers.js ===
+1 handlers['/city/save'] = form => {
+2   for (const key of ['城市编码', '城市名称', '省份', '国家']) if (!form[key]) throw Error('必填参数不能为空');
+3   if (records.some(row => !row.deleted && row.城市编码 === form.城市编码)) throw Error('城市编码已存在');
+4   records.push(form); return { success: true };
+5 };
+6 handlers['/city/query'] = filters => records.filter(row => !row.deleted && (!filters.城市编码 || row.城市编码 === filters.城市编码) && ['城市名称', '省份', '国家'].every(key => !filters[key] || row[key].includes(filters[key])));
